@@ -18,6 +18,7 @@ import { flowNodeTypes } from './flowNodeTypes'
 import { GrabHand } from './GrabHand'
 import { LoadingOverlay } from './LoadingOverlay'
 import { PlanScreen } from './PlanScreen'
+import { FitViewOnGraphChange } from './FitViewOnGraphChange'
 import { useFlowGraph } from './useFlowGraph'
 
 type Props = {
@@ -44,6 +45,11 @@ export const FlowCanvas = ({ stage, selectedId, onDropCard, onKeepWorking, onPer
     onPerfect,
     onShowPlan,
   })
+
+  const graphSignature = useMemo(
+    () => `${stage}:${graph.nodes.map((n) => n.id).sort().join(',')}`,
+    [graph.nodes, stage],
+  )
 
   const [nodes, setNodes, onNodesChange] = useNodesState(graph.nodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(graph.edges)
@@ -99,19 +105,21 @@ export const FlowCanvas = ({ stage, selectedId, onDropCard, onKeepWorking, onPer
             nodeTypes={flowNodeTypes}
             fitView={false}
             panOnDrag={true}
-            zoomOnScroll={true}
+            zoomOnScroll={false}
             zoomOnPinch={true}
-            panOnScroll={false}
+            panOnScroll
+            panOnScrollSpeed={0.85}
             selectionOnDrag={false}
             nodesDraggable={true}
             nodesConnectable={false}
             elementsSelectable={true}
             proOptions={{ hideAttribution: true }}
-            minZoom={0.4}
+            minZoom={0.28}
             maxZoom={1.8}
             defaultViewport={{ x: 0, y: 0, zoom: 1 }}
             defaultEdgeOptions={{ type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } }}
           >
+            <FitViewOnGraphChange graphSignature={graphSignature} />
             <Background id="array-dots" variant={BackgroundVariant.Dots} gap={18} size={1.5} color="#795ADF" />
             <MiniMap
               position="bottom-left"

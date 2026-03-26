@@ -3,6 +3,7 @@ import { Position, type Edge, type Node } from '@xyflow/react'
 
 import { FLOW_NODE_SUMMARY, type PlanOptionCard } from '../../data/planOptions'
 import type { Stage } from '../../types'
+import { flowLayout } from './flowLayout'
 
 type Params = {
   stage: Stage
@@ -27,11 +28,13 @@ export const useFlowGraph = ({
   const showKeyPiecesPanel = stage === 'key-pieces'
 
   return useMemo(() => {
+    const { x: lx, y: ly } = flowLayout
+
     const nodes: Node[] = [
       {
         id: 'goal-root',
         type: 'piggyBank',
-        position: { x: 520, y: 40 },
+        position: { x: lx.root, y: ly.root },
         data: { title: FLOW_NODE_SUMMARY.title, dateRange: FLOW_NODE_SUMMARY.dateRange },
         sourcePosition: Position.Bottom,
         targetPosition: Position.Top,
@@ -46,7 +49,7 @@ export const useFlowGraph = ({
       {
         id: 'selected-card',
         type: 'treeCard',
-        position: { x: 530, y: 235 },
+        position: { x: lx.centerCard, y: ly.cards },
         data: { card: selectedCard, faded: false },
         sourcePosition: Position.Bottom,
         targetPosition: Position.Top,
@@ -55,7 +58,7 @@ export const useFlowGraph = ({
       {
         id: 'left-card',
         type: 'treeCard',
-        position: { x: 220, y: 235 },
+        position: { x: lx.leftCard, y: ly.cards },
         data: { card: sideCards[0], faded: true },
         sourcePosition: Position.Bottom,
         targetPosition: Position.Top,
@@ -64,7 +67,7 @@ export const useFlowGraph = ({
       {
         id: 'right-card',
         type: 'treeCard',
-        position: { x: 840, y: 235 },
+        position: { x: lx.rightCard, y: ly.cards },
         data: { card: sideCards[1], faded: true },
         sourcePosition: Position.Bottom,
         targetPosition: Position.Top,
@@ -73,7 +76,7 @@ export const useFlowGraph = ({
       {
         id: 'pu',
         type: 'puNode',
-        position: { x: 665, y: 475 },
+        position: { x: lx.pu, y: ly.pu },
         data: {},
         sourcePosition: Position.Bottom,
         targetPosition: Position.Top,
@@ -82,7 +85,7 @@ export const useFlowGraph = ({
       {
         id: 'basics-label',
         type: 'basicsLabel',
-        position: { x: 615, y: 560 },
+        position: { x: lx.basicsPill, y: ly.basicsPill },
         data: {},
         sourcePosition: Position.Bottom,
         targetPosition: Position.Top,
@@ -99,15 +102,37 @@ export const useFlowGraph = ({
     )
 
     if (showConfirmPanel) {
-      nodes.push({ id: 'basics-panel', type: 'basicsPanel', position: { x: 460, y: 610 }, data: { onKeepWorking, onPerfect }, draggable: true })
+      nodes.push({
+        id: 'basics-panel',
+        type: 'basicsPanel',
+        position: { x: lx.basicsPanel, y: ly.basicsPanel },
+        data: { onKeepWorking, onPerfect },
+        draggable: true,
+      })
       edges.push({ id: 'e-label-panel', source: 'basics-label', target: 'basics-panel', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } })
     }
 
     if (showKeyPiecesLoading) {
       nodes.push(
-        { id: 'key-piece-icon', type: 'keyPieceIcon', position: { x: 665, y: 660 }, data: {}, sourcePosition: Position.Bottom, targetPosition: Position.Top, draggable: true },
-        { id: 'key-pieces-label', type: 'keyPiecesLabel', position: { x: 540, y: 750 }, data: {}, sourcePosition: Position.Bottom, targetPosition: Position.Top, draggable: true },
-        { id: 'experts', type: 'expertsNode', position: { x: 520, y: 845 }, data: {}, targetPosition: Position.Top, draggable: true },
+        {
+          id: 'key-piece-icon',
+          type: 'keyPieceIcon',
+          position: { x: lx.keyIcon, y: ly.keyIcon },
+          data: {},
+          sourcePosition: Position.Bottom,
+          targetPosition: Position.Top,
+          draggable: true,
+        },
+        {
+          id: 'key-pieces-label',
+          type: 'keyPiecesLabel',
+          position: { x: lx.keyLabel, y: ly.keyPiecesLabel },
+          data: {},
+          sourcePosition: Position.Bottom,
+          targetPosition: Position.Top,
+          draggable: true,
+        },
+        { id: 'experts', type: 'expertsNode', position: { x: lx.experts, y: ly.experts }, data: {}, targetPosition: Position.Top, draggable: true },
       )
       edges.push(
         { id: 'e-basics-keyicon', source: 'basics-label', target: 'key-piece-icon', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
@@ -118,8 +143,23 @@ export const useFlowGraph = ({
 
     if (showKeyPiecesPanel) {
       nodes.push(
-        { id: 'key-piece-icon', type: 'keyPieceIcon', position: { x: 665, y: 660 }, data: {}, sourcePosition: Position.Bottom, targetPosition: Position.Top, draggable: true },
-        { id: 'key-pieces-panel', type: 'keyPiecesPanel', position: { x: 330, y: 730 }, data: { onKeepWorking, onShowPlan }, targetPosition: Position.Top, draggable: true },
+        {
+          id: 'key-piece-icon',
+          type: 'keyPieceIcon',
+          position: { x: lx.keyIcon, y: ly.keyIcon },
+          data: {},
+          sourcePosition: Position.Bottom,
+          targetPosition: Position.Top,
+          draggable: true,
+        },
+        {
+          id: 'key-pieces-panel',
+          type: 'keyPiecesPanel',
+          position: { x: lx.keyPiecesPanel, y: ly.keyPiecesPanel },
+          data: { onKeepWorking, onShowPlan },
+          targetPosition: Position.Top,
+          draggable: true,
+        },
       )
       edges.push(
         { id: 'e-basics-keyicon-panel', source: 'basics-label', target: 'key-piece-icon', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
