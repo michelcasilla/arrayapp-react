@@ -1,4 +1,51 @@
 ---
+description: TypeScript + React conventions for src/ code
+globs: "{src,HTML}/**/*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# TypeScript + React conventions
+
+## Component & file conventions
+
+- Components are **arrow functions**:
+
+```tsx
+// ✅
+export const CounterButton = ({ count, onIncrement }: Props) => {
+  return <button onClick={onIncrement}>{count}</button>
+}
+```
+
+- Prefer named exports for components and utilities; keep `default export` only where the repo already uses it (e.g. `src/App.tsx`).
+- Keep props typed explicitly (interface or type). Prefer:
+  - `type Props = { ... }` for simple props
+  - `interface Props { ... }` when extending/merging is helpful
+
+## Hooks
+
+- Follow the rules of hooks (no conditional hooks; only call hooks at top level).
+- Prefer local state (`useState`) for UI state; lift state only when needed.
+- Effects:
+  - ✅ side-effects only (subscriptions, timers, imperative APIs)
+  - ❌ not for deriving values from other state/props
+
+## Types
+
+- Prefer unions over enums.
+- Prefer `unknown` over `any` and narrow with type guards.
+- Avoid non-null assertions (`!`) unless you’ve proven the value exists in that scope.
+
+## Imports
+
+- Group imports: external → internal → styles/assets.
+- Keep import paths consistent and sorted within groups.
+
+## Vite + assets
+
+- Import static assets via ES modules (as done in `src/App.tsx`).
+- Keep asset usage accessible: provide meaningful `alt` text for real content images; allow empty `alt=""` only for decorative images.
+---
 description: TypeScript/React conventions (including arrow functions)
 globs: **/*.{ts,tsx}
 alwaysApply: false
