@@ -1,0 +1,15 @@
+---
+description: TypeScript/React conventions (including arrow functions)
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TypeScript + React conventions
+
+- **Arrow functions**: use arrow functions for components, helpers, and callbacks.
+  - Prefer `export const Foo = (...) => {}` over `export function Foo(...) {}`.
+- **Components**: keep props typed and colocated; avoid overly broad prop bags.
+- **State updates**: prefer functional updates when based on previous state.
+- **JSX**: keep conditional rendering readable; extract helpers/components when needed.
+- **Accessibility**: interactive elements must be keyboard accessible and labeled.
+

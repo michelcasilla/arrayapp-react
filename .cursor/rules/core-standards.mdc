@@ -1,0 +1,16 @@
+---
+description: Repo-wide engineering standards
+alwaysApply: true
+---
+
+# Core standards
+
+- **Clarity first**: prefer small, well-named modules/components over cleverness.
+- **TypeScript**: keep types explicit at boundaries (props, exported functions, API results); avoid `any`.
+- **React**: keep components pure; push side effects into hooks; keep render paths simple.
+- **Error handling**: never swallow errors; surface actionable messages; log with context.
+- **Imports**: use absolute/relative imports consistently; keep import lists tidy.
+- **Formatting**: keep diffs minimal; don’t reformat unrelated code.
+- **Tests**: add/adjust tests for non-trivial behavior changes; keep tests deterministic.
+- **Security**: never commit secrets; avoid logging sensitive data.
+
