@@ -27,14 +27,14 @@ export const BasicsPanelNode = ({ data }: { data?: PanelNodeData }) => {
         <button
           type="button"
           onClick={data?.onPerfect}
-          className="rounded-full bg-[#21C9A2] px-6 py-2 text-[16px] font-semibold text-white"
+          className="btn-elevate rounded-full bg-[#21C9A2] px-6 py-2 text-[16px] font-semibold text-white shadow-md"
         >
           Yes, this is perfect!
         </button>
         <button
           type="button"
           onClick={data?.onKeepWorking}
-          className="rounded-full border-2 border-[#B9A7E9] px-6 py-2 text-[16px] font-semibold text-[#6B58B8]"
+          className="btn-elevate rounded-full border-2 border-[#B9A7E9] bg-white/90 px-6 py-2 text-[16px] font-semibold text-[#6B58B8] shadow-sm"
         >
           Let’s keep working on these
         </button>

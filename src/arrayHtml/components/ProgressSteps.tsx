@@ -12,7 +12,10 @@ const stepCenterPct = (i: number, colCount: number) => ((i + 0.5) / colCount) * 
 
 const DoneIcon = () => {
   return (
-    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full shadow-sm" style={{ backgroundColor: TEAL }}>
+    <div
+      className="animate-array-step-pop flex h-10 w-10 shrink-0 items-center justify-center rounded-full shadow-sm"
+      style={{ backgroundColor: TEAL }}
+    >
       <img src="/assets/icon-check.svg" alt="" className="h-5 w-5" draggable={false} />
     </div>
   )
@@ -36,7 +39,7 @@ export const ProgressSteps = ({ steps, state }: Props) => {
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute top-5 z-0 h-[2px] -translate-y-1/2"
+          className="transition-progress-line pointer-events-none absolute top-5 z-0 h-[2px] -translate-y-1/2"
           style={{ left: `${firstCenter}%`, width: `${greenWidthPct}%`, backgroundColor: TEAL }}
           aria-hidden="true"
         />
@@ -50,7 +53,8 @@ export const ProgressSteps = ({ steps, state }: Props) => {
             const done = completed.includes(i)
             const circle = active ? (
               <div
-                className="relative z-10 box-border flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#9376D4] bg-[#2A107E] shadow-sm"
+                key={`active-${activeIndex}-${i}`}
+                className="animate-array-step-active relative z-10 box-border flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#9376D4] bg-[#2A107E] shadow-md ring-2 ring-[#9376D4]/25 ring-offset-2 ring-offset-[#EADFFF]"
                 role="listitem"
                 aria-current="step"
                 aria-label={label}
@@ -64,10 +68,12 @@ export const ProgressSteps = ({ steps, state }: Props) => {
                 />
               </div>
             ) : done ? (
-              <DoneIcon />
+              <div key={`done-${i}`} className="flex justify-center">
+                <DoneIcon />
+              </div>
             ) : (
               <div
-                className="relative z-10 h-10 w-10 shrink-0 rounded-full border-2 border-[#9376D4] bg-[#EADFFF]"
+                className="relative z-10 h-10 w-10 shrink-0 rounded-full border-2 border-[#9376D4] bg-[#EADFFF] transition-colors duration-300"
                 role="listitem"
                 aria-hidden="true"
               />
@@ -84,8 +90,13 @@ export const ProgressSteps = ({ steps, state }: Props) => {
         className="mt-3 grid text-[11px] font-bold leading-tight text-[#2A107E]"
         style={{ gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))` }}
       >
-        {steps.map((label) => (
-          <div className="min-w-0 text-center" key={`step-${label}`}>
+        {steps.map((label, i) => (
+          <div
+            className={`min-w-0 text-center transition-all duration-300 ease-out ${
+              i === activeIndex ? 'font-bold text-[#2A107E]' : 'font-normal text-[#2A107E]/75'
+            }`}
+            key={`step-${label}`}
+          >
             {label}
           </div>
         ))}

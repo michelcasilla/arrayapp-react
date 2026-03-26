@@ -67,6 +67,12 @@ export const ArrayHtmlApp = () => {
   const handlePerfect = () => setStage('key-pieces-loading')
   const handleShowPlan = () => setStage('the-plan')
 
+  const handleBackToWorkspace = () => {
+    setStage('define')
+    setSelectedId(PLAN_OPTION_CARDS[1].id)
+    setClarifyMessage("Sure i'll try the local approach")
+  }
+
   return (
     <div className="flex h-screen min-h-0 w-screen flex-col overflow-hidden bg-[#EADFFF]">
       <div className="flex min-h-0 min-w-0 flex-1">
@@ -88,6 +94,7 @@ export const ArrayHtmlApp = () => {
           onKeepWorking={handleKeepWorking}
           onPerfect={handlePerfect}
           onShowPlan={handleShowPlan}
+          onBackToWorkspace={handleBackToWorkspace}
         />
       </div>
       {/* <AppFooter /> */}

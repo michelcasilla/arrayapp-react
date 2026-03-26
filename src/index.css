@@ -25,3 +25,56 @@ body {
 .array-flow-wrap .react-flow__background-pattern.dots {
   fill: #795adf;
 }
+
+/* Shared button hover: slight lift + shadow (use with existing shadow classes) */
+@layer components {
+  .btn-elevate {
+    @apply transition-[transform,box-shadow] duration-200 ease-out will-change-transform;
+  }
+  .btn-elevate:not(:disabled) {
+    @apply hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-md;
+  }
+}
+
+/* Progress stepper: completion pop + active emphasis */
+@keyframes array-step-pop {
+  0% {
+    transform: scale(0.72);
+    opacity: 0.65;
+  }
+  70% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .animate-array-step-pop {
+    animation: array-step-pop 0.45s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+  }
+  .animate-array-step-active {
+    animation: array-step-pop 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+  }
+  .transition-progress-line {
+    transition:
+      width 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.35s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-array-step-pop,
+  .animate-array-step-active {
+    animation: none;
+  }
+  .transition-progress-line {
+    transition: none;
+  }
+  .btn-elevate:not(:disabled) {
+    transform: none;
+  }
+}

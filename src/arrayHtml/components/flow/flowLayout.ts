@@ -32,3 +32,5 @@ export const flowLayout = {
     keyPiecesPanel: 940,
   },
 } as const
+
+export type FlowLayout = typeof flowLayout

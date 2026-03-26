@@ -1,6 +1,10 @@
 import { useState } from 'react'
 
-export const PlanScreen = () => {
+type Props = {
+  onBackToWorkspace: () => void
+}
+
+export const PlanScreen = ({ onBackToWorkspace }: Props) => {
   const [view, setView] = useState<'by-key-pieces' | 'all-actions'>('by-key-pieces')
   const [menuOpen, setMenuOpen] = useState(false)
   const [openSection, setOpenSection] = useState('validated')
@@ -20,15 +24,23 @@ export const PlanScreen = () => {
   ]
 
   return (
-    <div className="mx-auto h-full w-full max-w-[1000px] overflow-hidden px-8 pt-5 pb-5 text-[#2A107E]">
+    <div className="mx-auto h-full w-full max-w-[98vw] overflow-hidden px-8 pt-5 pb-5 text-[#2A107E]">
       <div className="mb-3 flex items-center justify-between">
-        <button className="rounded-full border border-[#BDAEEA] bg-white/70 px-3 py-1 text-[12px] font-semibold text-[#7A63CF]">
+        <button
+          type="button"
+          className="btn-elevate rounded-full border border-[#BDAEEA] bg-white/70 px-3 py-1 text-[12px] font-semibold text-[#7A63CF] shadow-sm"
+          onClick={onBackToWorkspace}
+        >
           ← Back to Workspace
         </button>
       </div>
 
-      <div className="relative rounded-2xl border border-[#BDAEEA] bg-white/70 px-4 py-2 shadow-sm">
-        <button className="absolute right-3 top-2 text-base text-[#7A63CF]" onClick={() => setMenuOpen((v) => !v)}>
+      <div className="relative rounded-2xl border border-[#BDAEEA] bg-white/70 px-4 py-2 shadow-sm mt-6">
+        <button
+          type="button"
+          className="btn-elevate absolute right-3 top-2 rounded-md px-1 text-base text-[#7A63CF]"
+          onClick={() => setMenuOpen((v) => !v)}
+        >
           •••
         </button>
         <div className="flex items-center gap-4">
@@ -43,15 +55,24 @@ export const PlanScreen = () => {
         </div>
         {menuOpen ? (
           <div className="absolute right-2 top-10 z-10 w-[190px] rounded-xl border border-[#BDAEEA] bg-white shadow-lg">
-            <button className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-[#F2ECFD]">
+            <button
+              type="button"
+              className="btn-elevate flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-[#F2ECFD]"
+            >
               <img src="/assets/icon-edit-plan-information.svg" alt="" className="h-3.5 w-3.5" />
               <span>Edit Plan Information</span>
             </button>
-            <button className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-[#F2ECFD]">
+            <button
+              type="button"
+              className="btn-elevate flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-[#F2ECFD]"
+            >
               <img src="/assets/icon-clone-plan.svg" alt="" className="h-3.5 w-3.5" />
               <span>Clone Plan</span>
             </button>
-            <button className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-[#F2ECFD]">
+            <button
+              type="button"
+              className="btn-elevate flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-[#F2ECFD]"
+            >
               <img src="/assets/icon-delete-plan.svg" alt="" className="h-3.5 w-3.5" />
               <span>Delete Plan</span>
             </button>
@@ -151,7 +172,8 @@ export const PlanScreen = () => {
                     />
                   </div>
                   <button
-                    className="flex w-full items-center justify-between pr-8 text-left"
+                    type="button"
+                    className="btn-elevate flex w-full items-center justify-between pr-8 text-left"
                     onClick={() => setOpenSection((s) => (s === section.key ? '' : section.key))}
                   >
                     <div className="flex min-w-0 flex-1 items-center gap-3 px-4 py-2">

@@ -1,8 +1,19 @@
 import { useMemo } from 'react'
-import { Position, type Edge, type Node } from '@xyflow/react'
+import type { Edge, Node } from '@xyflow/react'
 
-import { FLOW_NODE_SUMMARY, type PlanOptionCard } from '../../data/planOptions'
+import type { PlanOptionCard } from '../../data/planOptions'
 import type { Stage } from '../../types'
+import {
+  createBasicsPanelEdge,
+  createBasicsPanelNode,
+  createGoalRootNode,
+  createKeyPiecesLoadingEdges,
+  createKeyPiecesLoadingNodes,
+  createKeyPiecesPanelEdges,
+  createKeyPiecesPanelNodes,
+  createTreeStackEdges,
+  createTreeStackNodes,
+} from './flowGraphBuilders'
 import { flowLayout } from './flowLayout'
 
 type Params = {
@@ -28,143 +39,28 @@ export const useFlowGraph = ({
   const showKeyPiecesPanel = stage === 'key-pieces'
 
   return useMemo(() => {
-    const { x: lx, y: ly } = flowLayout
-
-    const nodes: Node[] = [
-      {
-        id: 'goal-root',
-        type: 'piggyBank',
-        position: { x: lx.root, y: ly.root },
-        data: { title: FLOW_NODE_SUMMARY.title, dateRange: FLOW_NODE_SUMMARY.dateRange },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        draggable: true,
-      },
-    ]
+    const layout = flowLayout
+    const nodes: Node[] = [createGoalRootNode(layout)]
     const edges: Edge[] = []
 
     if (!showTree) return { nodes, edges }
 
-    nodes.push(
-      {
-        id: 'selected-card',
-        type: 'treeCard',
-        position: { x: lx.centerCard, y: ly.cards },
-        data: { card: selectedCard, faded: false },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        draggable: true,
-      },
-      {
-        id: 'left-card',
-        type: 'treeCard',
-        position: { x: lx.leftCard, y: ly.cards },
-        data: { card: sideCards[0], faded: true },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        draggable: true,
-      },
-      {
-        id: 'right-card',
-        type: 'treeCard',
-        position: { x: lx.rightCard, y: ly.cards },
-        data: { card: sideCards[1], faded: true },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        draggable: true,
-      },
-      {
-        id: 'pu',
-        type: 'puNode',
-        position: { x: lx.pu, y: ly.pu },
-        data: {},
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        draggable: true,
-      },
-      {
-        id: 'basics-label',
-        type: 'basicsLabel',
-        position: { x: lx.basicsPill, y: ly.basicsPill },
-        data: {},
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        draggable: true,
-      },
-    )
-
-    edges.push(
-      { id: 'e-root-left', source: 'goal-root', target: 'left-card', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-      { id: 'e-root-selected', source: 'goal-root', target: 'selected-card', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-      { id: 'e-root-right', source: 'goal-root', target: 'right-card', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-      { id: 'e-selected-pu', source: 'selected-card', target: 'pu', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-      { id: 'e-pu-basics', source: 'pu', target: 'basics-label', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-    )
+    nodes.push(...createTreeStackNodes(layout, { selectedCard, sideCards }))
+    edges.push(...createTreeStackEdges())
 
     if (showConfirmPanel) {
-      nodes.push({
-        id: 'basics-panel',
-        type: 'basicsPanel',
-        position: { x: lx.basicsPanel, y: ly.basicsPanel },
-        data: { onKeepWorking, onPerfect },
-        draggable: true,
-      })
-      edges.push({ id: 'e-label-panel', source: 'basics-label', target: 'basics-panel', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } })
+      nodes.push(createBasicsPanelNode(layout, { onKeepWorking, onPerfect }))
+      edges.push(createBasicsPanelEdge())
     }
 
     if (showKeyPiecesLoading) {
-      nodes.push(
-        {
-          id: 'key-piece-icon',
-          type: 'keyPieceIcon',
-          position: { x: lx.keyIcon, y: ly.keyIcon },
-          data: {},
-          sourcePosition: Position.Bottom,
-          targetPosition: Position.Top,
-          draggable: true,
-        },
-        {
-          id: 'key-pieces-label',
-          type: 'keyPiecesLabel',
-          position: { x: lx.keyLabel, y: ly.keyPiecesLabel },
-          data: {},
-          sourcePosition: Position.Bottom,
-          targetPosition: Position.Top,
-          draggable: true,
-        },
-        { id: 'experts', type: 'expertsNode', position: { x: lx.experts, y: ly.experts }, data: {}, targetPosition: Position.Top, draggable: true },
-      )
-      edges.push(
-        { id: 'e-basics-keyicon', source: 'basics-label', target: 'key-piece-icon', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-        { id: 'e-keyicon-keylabel', source: 'key-piece-icon', target: 'key-pieces-label', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-        { id: 'e-keylabel-experts', source: 'key-pieces-label', target: 'experts', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-      )
+      nodes.push(...createKeyPiecesLoadingNodes(layout))
+      edges.push(...createKeyPiecesLoadingEdges())
     }
 
     if (showKeyPiecesPanel) {
-      nodes.push(
-        {
-          id: 'key-piece-icon',
-          type: 'keyPieceIcon',
-          position: { x: lx.keyIcon, y: ly.keyIcon },
-          data: {},
-          sourcePosition: Position.Bottom,
-          targetPosition: Position.Top,
-          draggable: true,
-        },
-        {
-          id: 'key-pieces-panel',
-          type: 'keyPiecesPanel',
-          position: { x: lx.keyPiecesPanel, y: ly.keyPiecesPanel },
-          data: { onKeepWorking, onShowPlan },
-          targetPosition: Position.Top,
-          draggable: true,
-        },
-      )
-      edges.push(
-        { id: 'e-basics-keyicon-panel', source: 'basics-label', target: 'key-piece-icon', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-        { id: 'e-keyicon-panel', source: 'key-piece-icon', target: 'key-pieces-panel', type: 'smoothstep', style: { stroke: '#8D72D8', strokeWidth: 2.5 } },
-      )
+      nodes.push(...createKeyPiecesPanelNodes(layout, { onKeepWorking, onShowPlan }))
+      edges.push(...createKeyPiecesPanelEdges())
     }
 
     return { nodes, edges }

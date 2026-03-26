@@ -28,9 +28,18 @@ type Props = {
   onKeepWorking: () => void
   onPerfect: () => void
   onShowPlan: () => void
+  onBackToWorkspace: () => void
 }
 
-export const FlowCanvas = ({ stage, selectedId, onDropCard, onKeepWorking, onPerfect, onShowPlan }: Props) => {
+export const FlowCanvas = ({
+  stage,
+  selectedId,
+  onDropCard,
+  onKeepWorking,
+  onPerfect,
+  onShowPlan,
+  onBackToWorkspace,
+}: Props) => {
   const selectedCard = useMemo(
     () => PLAN_OPTION_CARDS.find((c) => c.id === selectedId) ?? PLAN_OPTION_CARDS[1],
     [selectedId],
@@ -79,7 +88,7 @@ export const FlowCanvas = ({ stage, selectedId, onDropCard, onKeepWorking, onPer
       <main className="array-flow-wrap relative flex h-full min-h-0 min-w-0 flex-1 flex-col bg-[#EADFFF]">
         <FlowLogInButton />
         <div className="min-h-0 flex-1 overflow-hidden">
-          <PlanScreen />
+          <PlanScreen onBackToWorkspace={onBackToWorkspace} />
         </div>
       </main>
     )

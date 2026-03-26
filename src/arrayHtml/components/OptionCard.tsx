@@ -56,7 +56,7 @@ export const OptionCard = ({
   constraint,
   tradeoff,
 }: OptionCardProps) => {
-  const frame = selected ? `border-2 shadow-md` : 'border-2 border-transparent shadow-sm hover:shadow'
+  const frame = selected ? `border-2 shadow-md` : 'border-2 border-transparent shadow-sm hover:shadow-md'
 
   return (
     <button
@@ -64,7 +64,7 @@ export const OptionCard = ({
       onClick={onClick}
       draggable={draggable}
       onDragStart={onDragStart}
-      className={`box-border flex w-full gap-3 rounded-2xl bg-white px-5 py-4 text-left transition ${frame} ${
+      className={`box-border flex w-full gap-3 rounded-2xl bg-white px-5 py-4 text-left transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 ${frame} ${
         draggable ? 'cursor-grab active:cursor-grabbing' : ''
       }`}
       style={selected ? { borderColor: STEP_TEAL } : undefined}

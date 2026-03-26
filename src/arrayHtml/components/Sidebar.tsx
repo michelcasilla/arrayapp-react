@@ -35,7 +35,7 @@ const ClarifyComposer = ({ message, onChange, onSend }: ClarifyComposerProps) =>
         <button
           type="button"
           onClick={onSend}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2A107E] text-white shadow"
+          className="btn-elevate flex h-9 w-9 items-center justify-center rounded-full bg-[#2A107E] text-white shadow-md"
         >
           <img src="/assets/icon-search-field-arrow.svg" alt="" className="h-[13px] w-[17px] select-none" draggable={false} />
         </button>
@@ -60,7 +60,7 @@ const ConfirmComposer = ({ onSend }: ConfirmComposerProps) => {
         <button
           type="button"
           onClick={onSend}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2A107E] text-white shadow"
+          className="btn-elevate flex h-9 w-9 aspect-[1/1] items-center justify-center rounded-full bg-[#2A107E] text-white shadow-md "
         >
           <img src="/assets/icon-search-field-arrow.svg" alt="" className="h-[13px] w-[17px] select-none" draggable={false} />
         </button>
