@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Sidebar } from './components/Sidebar'
 import { FlowCanvas } from './components/FlowCanvas'
-import { AppFooter } from './components/AppFooter'
 import { PLAN_OPTION_CARDS } from './data/planOptions'
 import type { ProgressState, Stage } from './types'
 
@@ -91,7 +90,7 @@ export const ArrayHtmlApp = () => {
           onShowPlan={handleShowPlan}
         />
       </div>
-      <AppFooter />
+      {/* <AppFooter /> */}
     </div>
   )
 }
