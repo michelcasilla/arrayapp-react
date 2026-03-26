@@ -19,12 +19,12 @@ export const ExpertsNode = () => {
             key={src}
             src={src}
             alt=""
-            width={94}
-            height={94}
+            width={54}
+            height={54}
             loading="lazy"
             decoding="async"
             referrerPolicy="no-referrer"
-            className={`h-[94px] w-[94px] rounded-full object-cover shadow-[0_4px_14px_rgba(42,16,126,0.18)] ring-2 ring-white/90 ${idx > 0 ? '-ml-4' : ''}`}
+            className={`h-[54px] w-[54px] rounded-full object-cover shadow-[0_4px_14px_rgba(42,16,126,0.18)] ring-2 ring-white/90 ${idx > 0 ? '-ml-4' : ''}`}
             draggable={false}
           />
         ))}
