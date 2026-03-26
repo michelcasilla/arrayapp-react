@@ -4,8 +4,8 @@ import { FlowCanvas } from './components/FlowCanvas'
 import { PLAN_OPTION_CARDS } from './data/planOptions'
 import type { ProgressState, Stage } from './types'
 
-const SIDEBAR_MIN_PX = 300
-const SIDEBAR_MAX_PX = 576
+const SIDEBAR_MIN_PX = 500
+const SIDEBAR_MAX_PX = 580
 
 export const ArrayHtmlApp = () => {
   const [selectedId, setSelectedId] = useState(PLAN_OPTION_CARDS[1].id)
