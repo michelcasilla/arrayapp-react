@@ -1,10 +1,12 @@
 ---
-description: TypeScript + React conventions for src/ code
+description: TypeScript + React style guide for src/ (implements repo conventions)
 globs: "{src,HTML}/**/*.{ts,tsx,js,jsx}"
 alwaysApply: false
 ---
 
 # TypeScript + React conventions
+
+Apply these together with **`core-standards.mdc`** and **`eslint.config.js`**.
 
 ## Component & file conventions
 
@@ -17,24 +19,28 @@ export const CounterButton = ({ count, onIncrement }: Props) => {
 }
 ```
 
+- **Arrow functions**: use arrow functions for components, helpers, and callbacks. Prefer `export const Foo = (...) => {}` over `export function Foo(...) {}`.
 - Prefer named exports for components and utilities; keep `default export` only where the repo already uses it (e.g. `src/App.tsx`).
-- Keep props typed explicitly (interface or type). Prefer:
-  - `type Props = { ... }` for simple props
-  - `interface Props { ... }` when extending/merging is helpful
+- Keep props typed explicitly (interface or type). Prefer `type Props = { ... }` for simple props; `interface Props { ... }` when extending/merging is helpful.
+- **Components**: avoid overly broad prop bags.
 
 ## Hooks
 
 - Follow the rules of hooks (no conditional hooks; only call hooks at top level).
 - Prefer local state (`useState`) for UI state; lift state only when needed.
-- Effects:
-  - ✅ side-effects only (subscriptions, timers, imperative APIs)
-  - ❌ not for deriving values from other state/props
+- **State updates**: prefer functional updates when based on previous state.
+- Effects: side-effects only (subscriptions, timers, imperative APIs)—not for deriving values from other state/props.
 
 ## Types
 
 - Prefer unions over enums.
 - Prefer `unknown` over `any` and narrow with type guards.
 - Avoid non-null assertions (`!`) unless you’ve proven the value exists in that scope.
+
+## JSX & accessibility
+
+- Keep conditional rendering readable; extract helpers/components when needed.
+- Interactive elements must be keyboard accessible and labeled.
 
 ## Imports
 
@@ -44,19 +50,4 @@ export const CounterButton = ({ count, onIncrement }: Props) => {
 ## Vite + assets
 
 - Import static assets via ES modules (as done in `src/App.tsx`).
-- Keep asset usage accessible: provide meaningful `alt` text for real content images; allow empty `alt=""` only for decorative images.
----
-description: TypeScript/React conventions (including arrow functions)
-globs: **/*.{ts,tsx}
-alwaysApply: false
----
-
-# TypeScript + React conventions
-
-- **Arrow functions**: use arrow functions for components, helpers, and callbacks.
-  - Prefer `export const Foo = (...) => {}` over `export function Foo(...) {}`.
-- **Components**: keep props typed and colocated; avoid overly broad prop bags.
-- **State updates**: prefer functional updates when based on previous state.
-- **JSX**: keep conditional rendering readable; extract helpers/components when needed.
-- **Accessibility**: interactive elements must be keyboard accessible and labeled.
-
+- Keep asset usage accessible: meaningful `alt` for content images; `alt=""` only for decorative images.

@@ -1,5 +1,5 @@
 ---
-description: Repo-wide coding standards for this project
+description: Repo-wide coding standards and mandatory style guide enforcement
 alwaysApply: true
 ---
 
@@ -10,37 +10,29 @@ alwaysApply: true
 - Match existing patterns in the repo (imports, naming, structure).
 - Avoid introducing new dependencies unless necessary.
 
+## Style guide (mandatory)
+
+- **Authoritative sources**: follow this file, **`.cursor/rules/typescript-react-conventions.mdc`** for TypeScript/React files, and **`eslint.config.js`** (arrow functions, hooks, React Refresh, etc.). Implementations must align with these—not ad‑hoc preferences.
+- **Before finishing code changes**: ensure **`npm run lint`** and **`npm run build`** (`tsc -b`) succeed; fix violations rather than disabling rules without a documented reason.
+
 ## JavaScript/TypeScript style
 
 - Use **arrow functions** (this repo avoids `function` declarations).
 - Prefer `const`; use `let` only when reassignment is required.
 - Avoid `any`. If unavoidable, document the reason in the PR/commit, not inline.
-- Handle errors intentionally; don’t swallow exceptions.
+- Keep types explicit at boundaries (props, exported functions, API results).
+- Handle errors intentionally; don’t swallow exceptions; surface actionable messages; log with context.
+- **Imports**: use absolute/relative imports consistently; group external → internal → styles/assets; keep import lists tidy.
 
 ## React style
 
-- Use **function components** and **hooks**.
+- Use **function components** and **hooks**; keep components pure; push side effects into hooks; keep render paths simple.
 - Keep components focused; extract reusable logic into custom hooks.
 - Don’t use `useEffect` to derive state from props/state; compute during render or use memoization.
 - Keep event handlers stable only when necessary (don’t overuse `useCallback`).
 
-## Quality gates
+## Quality & hygiene
 
-- Keep ESLint passing (`npm run lint`).
-- Keep TypeScript passing (`npm run build` runs `tsc -b`).
----
-description: Repo-wide engineering standards
-alwaysApply: true
----
-
-# Core standards
-
-- **Clarity first**: prefer small, well-named modules/components over cleverness.
-- **TypeScript**: keep types explicit at boundaries (props, exported functions, API results); avoid `any`.
-- **React**: keep components pure; push side effects into hooks; keep render paths simple.
-- **Error handling**: never swallow errors; surface actionable messages; log with context.
-- **Imports**: use absolute/relative imports consistently; keep import lists tidy.
 - **Formatting**: keep diffs minimal; don’t reformat unrelated code.
 - **Tests**: add/adjust tests for non-trivial behavior changes; keep tests deterministic.
 - **Security**: never commit secrets; avoid logging sensitive data.
-
