@@ -1,13 +1,17 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Sidebar } from './components/Sidebar'
 import { FlowCanvas } from './components/FlowCanvas'
 import { PLAN_OPTION_CARDS } from './data/planOptions'
 import type { ProgressState, Stage } from './types'
 
+const SIDEBAR_MIN_PX = 300
+const SIDEBAR_MAX_PX = 576
+
 export const ArrayHtmlApp = () => {
   const [selectedId, setSelectedId] = useState(PLAN_OPTION_CARDS[1].id)
   const [stage, setStage] = useState<Stage>('define')
   const [clarifyMessage, setClarifyMessage] = useState("Sure i'll try the local approach")
+  const [sidebarWidthPx, setSidebarWidthPx] = useState(400)
 
   const progressState: ProgressState = useMemo(() => {
     if (stage === 'define') return { activeIndex: 0, completed: [] }
@@ -73,29 +77,78 @@ export const ArrayHtmlApp = () => {
     setClarifyMessage("Sure i'll try the local approach")
   }
 
+  const handleSplitterPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      event.preventDefault()
+      const startX = event.clientX
+      const startWidth = sidebarWidthPx
+      const handle = event.currentTarget
+      handle.setPointerCapture(event.pointerId)
+
+      const clamp = (n: number) => Math.min(SIDEBAR_MAX_PX, Math.max(SIDEBAR_MIN_PX, n))
+
+      const onPointerMove = (ev: PointerEvent) => {
+        if (ev.pointerId !== event.pointerId) return
+        setSidebarWidthPx(clamp(startWidth + (ev.clientX - startX)))
+      }
+
+      const onPointerUp = (ev: PointerEvent) => {
+        if (ev.pointerId !== event.pointerId) return
+        handle.releasePointerCapture(event.pointerId)
+        window.removeEventListener('pointermove', onPointerMove)
+        window.removeEventListener('pointerup', onPointerUp)
+        window.removeEventListener('pointercancel', onPointerUp)
+      }
+
+      window.addEventListener('pointermove', onPointerMove)
+      window.addEventListener('pointerup', onPointerUp)
+      window.addEventListener('pointercancel', onPointerUp)
+    },
+    [sidebarWidthPx],
+  )
+
   return (
     <div className="flex h-screen min-h-0 w-screen flex-col overflow-hidden bg-[#EADFFF]">
       <div className="flex min-h-0 min-w-0 flex-1">
-        <Sidebar
-          stage={stage}
-          selectedId={selectedId}
-          onSelectCard={setSelectedId}
-          onCardDragStart={handleCardDragStart}
-          clarifyMessage={clarifyMessage}
-          onClarifyMessageChange={setClarifyMessage}
-          onClarifySend={handleClarifySend}
-          onConfirmSend={handleConfirmSend}
-          progressState={progressState}
-        />
-        <FlowCanvas
-          stage={stage}
-          selectedId={selectedId}
-          onDropCard={handleCardDrop}
-          onKeepWorking={handleKeepWorking}
-          onPerfect={handlePerfect}
-          onShowPlan={handleShowPlan}
-          onBackToWorkspace={handleBackToWorkspace}
-        />
+        <div
+          className="h-full shrink-0 overflow-hidden"
+          style={{ width: sidebarWidthPx, minWidth: SIDEBAR_MIN_PX, maxWidth: SIDEBAR_MAX_PX }}
+        >
+          <Sidebar
+            stage={stage}
+            selectedId={selectedId}
+            onSelectCard={setSelectedId}
+            onCardDragStart={handleCardDragStart}
+            clarifyMessage={clarifyMessage}
+            onClarifyMessageChange={setClarifyMessage}
+            onClarifySend={handleClarifySend}
+            onConfirmSend={handleConfirmSend}
+            progressState={progressState}
+          />
+        </div>
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-valuenow={sidebarWidthPx}
+          aria-valuemin={SIDEBAR_MIN_PX}
+          aria-valuemax={SIDEBAR_MAX_PX}
+          tabIndex={0}
+          className="group relative w-2 shrink-0 cursor-col-resize touch-none select-none"
+          onPointerDown={handleSplitterPointerDown}
+        >
+          <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-[#D7C2FF] group-hover:bg-[#2A107E]/40 group-active:bg-[#2A107E]/55" />
+        </div>
+        <div className="min-h-0 min-w-0 flex-1">
+          <FlowCanvas
+            stage={stage}
+            selectedId={selectedId}
+            onDropCard={handleCardDrop}
+            onKeepWorking={handleKeepWorking}
+            onPerfect={handlePerfect}
+            onShowPlan={handleShowPlan}
+            onBackToWorkspace={handleBackToWorkspace}
+          />
+        </div>
       </div>
       {/* <AppFooter /> */}
     </div>

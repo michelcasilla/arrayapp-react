@@ -101,7 +101,7 @@ export const Sidebar = ({
   const reviseText = '“Let’s keep working on these”. Please provide any additions or revisions to the basics.'
 
   return (
-    <aside className="flex h-full w-[30%] min-w-[300px] max-w-xl flex-col border-r-2 border-[#D7C2FF] bg-[#EADFFF] px-6 py-8">
+    <aside className="flex h-full min-h-0 w-full min-w-0 flex-col bg-[#EADFFF] px-6 py-8">
       <div className="flex min-h-0 flex-1 flex-col gap-7">
         <header className="shrink-0 space-y-4">
           <ArrayLogo size="md" />
