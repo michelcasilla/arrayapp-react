@@ -1,3 +1,6 @@
+import { useRef } from 'react'
+import { useDrop } from 'react-dnd'
+import { NativeTypes } from 'react-dnd-html5-backend'
 import { ArrayLogo } from './ArrayLogo'
 import { OptionCard } from './OptionCard'
 import { ProgressSteps } from './ProgressSteps'
@@ -13,6 +16,8 @@ type Props = {
   onClarifyMessageChange: (value: string) => void
   onClarifySend: () => void
   onConfirmSend: () => void
+  uploadedDocument: File | null
+  onDocumentSelect: (file: File | null) => void
   progressState: ProgressState
 }
 
@@ -20,18 +25,66 @@ type ClarifyComposerProps = {
   message: string
   onChange: (value: string) => void
   onSend: () => void
+  uploadedDocument: File | null
+  onDocumentSelect: (file: File | null) => void
 }
 
-const ClarifyComposer = ({ message, onChange, onSend }: ClarifyComposerProps) => {
+type NativeFileDropItem = {
+  files?: File[]
+}
+
+const ClarifyComposer = ({ message, onChange, onSend, uploadedDocument, onDocumentSelect }: ClarifyComposerProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const [{ isOver }, dropRef] = useDrop(
+    () => ({
+      accept: [NativeTypes.FILE],
+      drop: (item: unknown) => {
+        const droppedItem = item as NativeFileDropItem
+        const firstFile = droppedItem.files?.[0] ?? null
+        if (firstFile) onDocumentSelect(firstFile)
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver({ shallow: true }),
+      }),
+    }),
+    [onDocumentSelect],
+  )
+
+  const handleClipClick = () => fileInputRef.current?.click()
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const firstFile = event.target.files?.[0] ?? null
+    onDocumentSelect(firstFile)
+    event.target.value = ''
+  }
+
   return (
-    <div className="rounded-2xl bg-white p-0.5 shadow-md ring-1 ring-[#DED1F8]">
+    <div
+      ref={(node) => {
+        dropRef(node)
+      }}
+      className={`rounded-2xl bg-white p-0.5 shadow-md ring-1 ${isOver ? 'ring-[#2A107E]' : 'ring-[#DED1F8]'}`}
+    >
       <textarea
         className="h-[120px] w-full resize-none rounded-t-2xl border-0 bg-transparent px-4 py-3 text-base text-slate-700 outline-none"
         value={message}
         onInput={(e) => onChange((e.target as HTMLTextAreaElement).value)}
       />
+      {uploadedDocument ? (
+        <p className="px-4 pb-2 text-xs text-[#2A107E]">Documento seleccionado: {uploadedDocument.name}</p>
+      ) : null}
       <div className="flex items-center justify-between rounded-b-2xl border-t border-[#ECE5FB] px-4 py-2.5">
-        <img src="/assets/icon-upload-clip.svg" alt="" className="h-4 w-[17px] select-none" draggable={false} />
+        <button type="button" onClick={handleClipClick} aria-label="Subir documento">
+          <img src="/assets/icon-upload-clip.svg" alt="" className="h-4 w-[17px] select-none" draggable={false} />
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="hidden"
+          onChange={handleInputChange}
+          accept=".pdf,.doc,.docx,.txt,.rtf,.md"
+        />
         <button
           type="button"
           onClick={onSend}
@@ -78,6 +131,8 @@ export const Sidebar = ({
   onClarifyMessageChange,
   onClarifySend,
   onConfirmSend,
+  uploadedDocument,
+  onDocumentSelect,
   progressState,
 }: Props) => {
   const isDefine = stage === 'define'
@@ -150,7 +205,13 @@ export const Sidebar = ({
           </div>
         ) : stage === 'clarify-1' || stage === 'clarify-2' || stage === 'revise' ? (
           <div className="min-h-0 flex-1 pt-2">
-            <ClarifyComposer message={clarifyMessage} onChange={onClarifyMessageChange} onSend={onClarifySend} />
+            <ClarifyComposer
+              message={clarifyMessage}
+              onChange={onClarifyMessageChange}
+              onSend={onClarifySend}
+              uploadedDocument={uploadedDocument}
+              onDocumentSelect={onDocumentSelect}
+            />
           </div>
         ) : stage === 'key-pieces' || stage === 'key-pieces-loading' || stage === 'the-plan' ? (
           <div className="min-h-0 flex-1 pt-2">

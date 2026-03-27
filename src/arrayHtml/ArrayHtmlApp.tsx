@@ -11,6 +11,7 @@ export const ArrayHtmlApp = () => {
   const [selectedId, setSelectedId] = useState(PLAN_OPTION_CARDS[1].id)
   const [stage, setStage] = useState<Stage>('define')
   const [clarifyMessage, setClarifyMessage] = useState("Sure i'll try the local approach")
+  const [uploadedDocument, setUploadedDocument] = useState<File | null>(null)
   const [sidebarWidthPx, setSidebarWidthPx] = useState(400)
 
   const progressState: ProgressState = useMemo(() => {
@@ -60,6 +61,7 @@ export const ArrayHtmlApp = () => {
   }
 
   const handleConfirmSend = () => setStage('confirm')
+  const handleDocumentSelect = (file: File | null) => setUploadedDocument(file)
 
   const handleKeepWorking = () => {
     setStage('revise')
@@ -123,6 +125,8 @@ export const ArrayHtmlApp = () => {
             onClarifyMessageChange={setClarifyMessage}
             onClarifySend={handleClarifySend}
             onConfirmSend={handleConfirmSend}
+            uploadedDocument={uploadedDocument}
+            onDocumentSelect={handleDocumentSelect}
             progressState={progressState}
           />
         </div>
