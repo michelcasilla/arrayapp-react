@@ -37,6 +37,8 @@ const WHAT_YOU_GET = [
 
 export const HomePage = ({ onSearch }: HomePageProps) => {
   const [query, setQuery] = useState('')
+  const [signinOpen, setSigninOpen] = useState(false)
+  const [signinEmail, setSigninEmail] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -48,11 +50,23 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
     textarea.classList.toggle('array-home-textarea-multiline', textarea.scrollHeight > 60)
   }, [query])
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSigninOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmed = query.trim()
     if (!trimmed) return
     onSearch(trimmed)
+  }
+
+  const handleSigninSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
   }
 
   return (
@@ -62,7 +76,7 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
           <a href="/" onClick={(e) => e.preventDefault()}>
             <img src="/assets/logo-array.svg" width={120} className="array-home-logo" alt="Array" />
           </a>
-          <button type="button" className="array-home-login-button">
+          <button type="button" className="array-home-login-button" onClick={() => setSigninOpen(true)}>
             Log In
           </button>
         </div>
@@ -168,6 +182,52 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
         </ul>
         <span className="array-home-footer-copyright">© {new Date().getFullYear()} Array</span>
       </footer>
+
+      <div
+        id="signin-panel-container"
+        className={`array-home-signin-panel-container ${signinOpen ? 'is-open' : ''}`}
+        aria-hidden={!signinOpen}
+      >
+        <div id="signin-panel-backdrop" className="array-home-signin-panel-backdrop" onClick={() => setSigninOpen(false)} />
+        <aside id="signin-panel" className="array-home-signin-panel">
+          <button
+            id="close-signin-panel"
+            type="button"
+            className="array-home-close-signin-panel"
+            onClick={() => setSigninOpen(false)}
+            aria-label="Close sign in panel"
+          >
+            ✕
+          </button>
+          <h2 className="array-home-signin-title">Log In</h2>
+          <div className="array-home-signin-content">
+            <form id="signin-form" className="array-home-signin-form" onSubmit={handleSigninSubmit}>
+              <input
+                name="email"
+                type="email"
+                placeholder="Email Address"
+                value={signinEmail}
+                onChange={(event) => setSigninEmail(event.target.value)}
+                className="array-home-signin-input"
+              />
+              <button className="array-home-signin-submit" type="submit">
+                Send Log In Link
+              </button>
+            </form>
+          </div>
+          <p className="array-home-signin-legal">
+            By signing in, you acknowledge that you understand and agree to the{' '}
+            <a href="#" className="array-home-signin-link">
+              Terms of Service
+            </a>{' '}
+            and{' '}
+            <a href="#" className="array-home-signin-link">
+              Privacy Policy
+            </a>
+            .
+          </p>
+        </aside>
+      </div>
     </div>
   )
 }

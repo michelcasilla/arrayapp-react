@@ -12,6 +12,126 @@
   padding-bottom: var(--footer-height);
 }
 
+.array-home-signin-panel-container {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.array-home-signin-panel-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 40%);
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.array-home-signin-panel {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  max-width: 28rem;
+  background: white;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  padding: 24px 40px 24px 56px;
+  transform: translateX(100%);
+  transition: transform 300ms ease-out;
+  pointer-events: auto;
+}
+
+.array-home-signin-panel-container.is-open {
+  pointer-events: auto;
+}
+
+.array-home-signin-panel-container.is-open .array-home-signin-panel-backdrop {
+  opacity: 1;
+}
+
+.array-home-signin-panel-container.is-open .array-home-signin-panel {
+  transform: translateX(0);
+}
+
+.array-home-close-signin-panel {
+  position: absolute;
+  left: 16px;
+  top: 24px;
+  color: #8b5cf6;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.array-home-close-signin-panel:hover {
+  opacity: 0.75;
+}
+
+.array-home-signin-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #8b5cf6;
+}
+
+.array-home-signin-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.array-home-signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.array-home-signin-input {
+  width: 100%;
+  border-radius: 9999px;
+  border: 1px solid #ddd6fe;
+  padding: 0.75rem 3.5rem 0.75rem 2.25rem;
+  font-size: 0.875rem;
+  color: #312e81;
+}
+
+.array-home-signin-input:focus {
+  border-color: #ede9fe;
+  outline: 1px solid #8b5cf6;
+}
+
+.array-home-signin-submit {
+  width: 100%;
+  border-radius: 9999px;
+  background: #ff625a;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: #fff;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.array-home-signin-submit:hover {
+  opacity: 0.9;
+}
+
+.array-home-signin-legal {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 2.5rem;
+  color: #2a107e;
+}
+
+.array-home-signin-link {
+  text-decoration: underline;
+  color: #8b5cf6;
+}
+
 .array-home-page-content-wrapper {
   padding: 40px 0 0;
 }
@@ -372,6 +492,10 @@
 
   .array-home-root {
     padding-bottom: 0;
+  }
+
+  .array-home-signin-panel {
+    padding: 24px 24px 24px 40px;
   }
 }
 
