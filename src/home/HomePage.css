@@ -585,6 +585,18 @@
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgb(52 28 93 / 8%);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.array-home-plan-state-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgb(52 28 93 / 13%);
+}
+
+.array-home-plan-state-card:focus-visible {
+  outline: 2px solid #795adf;
+  outline-offset: 2px;
 }
 
 .array-home-plan-state-card--completed {
@@ -795,7 +807,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 10vh;
+  margin-top: 5vh;
   margin-bottom: 15vh;
 }
 
@@ -875,28 +887,28 @@
 }
 
 .array-home-chip-1 {
-  background: rgb(255 255 255 / 0.8) url('/svg/plan-action-clipboard.svg') 10px 8px no-repeat;
-  padding-left: 32px;
+  background: rgb(255 255 255 / 0.8);
+  padding-left: 15px;
 }
 
 .array-home-chip-2 {
-  background: rgb(255 255 255 / 0.8) url('/svg/plan-action-suitcase.svg') 10px 8px no-repeat;
-  padding-left: 32px;
+  background: rgb(255 255 255 / 0.8);
+  padding-left: 15px;
 }
 
 .array-home-chip-3 {
-  background: rgb(255 255 255 / 0.8) url('/svg/plan-action-paint-brush.svg') 8px 10px no-repeat;
-  padding-left: 32px;
+  background: rgb(255 255 255 / 0.8);
+  padding-left: 15px;
 }
 
 .array-home-chip-4 {
-  background: rgb(255 255 255 / 0.8) url('/svg/plan-action-clipboard.svg') 10px 8px no-repeat;
-  padding-left: 32px;
+  background: rgb(255 255 255 / 0.8);
+  padding-left: 15px;
 }
 
 .array-home-chip-5 {
-  background: rgb(255 255 255 / 0.8) url('/svg/plan-action-house.svg') 10px 8px no-repeat;
-  padding-left: 32px;
+  background: rgb(255 255 255 / 0.8);
+  padding-left: 15px;
 }
 
 .array-home-create-plan-explanation {

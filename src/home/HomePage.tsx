@@ -45,18 +45,24 @@ const MOCK_PLAN_STATE_CARDS = [
     moreActions: '+ 12 more Actions',
     cta: 'View This Plan',
     iconSrc: '/images/icon-confetti.svg',
+    searchQuery:
+      'Help me finalize Sienna birthday party planning with invites, timeline, supplies, budget, and next actions.',
   },
   {
     type: 'in-progress',
     title: 'Research Summer Camps',
     description: 'Currently building and analyzing this plan....',
     iconSrc: '/images/plan-card-nodes.svg',
+    searchQuery:
+      'Compare summer camp options by schedule, budget, location, quality, and help me choose the best fit.',
   },
   {
     type: 'questions',
     title: 'Trip to Scotland',
     description: 'I need additional information from you...',
     iconSrc: '/images/plan-card-nodes.svg',
+    searchQuery:
+      'Plan a trip to Scotland and ask me the missing questions needed to build a complete itinerary.',
   },
 ] as const
 
@@ -112,6 +118,10 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
     event.preventDefault()
     setProfileOpen(false)
     setIsLoggedIn(false)
+  }
+
+  const handleMockCardClick = (searchQuery: string) => {
+    onSearch(searchQuery)
   }
 
   return (
@@ -195,6 +205,15 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
               <article
                 key={`${card.type}-${card.title}`}
                 className={`array-home-plan-state-card array-home-plan-state-card--${card.type}`}
+                onClick={() => handleMockCardClick(card.searchQuery)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    handleMockCardClick(card.searchQuery)
+                  }
+                }}
               >
                 {card.type === 'completed' ? (
                   <>
