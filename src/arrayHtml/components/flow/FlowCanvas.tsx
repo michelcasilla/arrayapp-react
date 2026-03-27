@@ -15,7 +15,6 @@ import { PLAN_OPTION_CARDS } from '../../data/planOptions'
 import type { Stage } from '../../types'
 import { FlowLogInButton } from './FlowLogInButton'
 import { flowNodeTypes } from './flowNodeTypes'
-import { GrabHand } from './GrabHand'
 import { LoadingOverlay } from './LoadingOverlay'
 import { PlanScreen } from './PlanScreen'
 import { FitViewOnGraphChange } from './FitViewOnGraphChange'
@@ -69,7 +68,6 @@ export const FlowCanvas = ({
   }, [graph.edges, graph.nodes, setEdges, setNodes])
 
   const showLoading = stage === 'loading'
-  const showHand = stage !== 'define' && !showLoading
 
   const handleDrop: React.DragEventHandler<HTMLElement> = (event) => {
     event.preventDefault()
@@ -101,8 +99,6 @@ export const FlowCanvas = ({
       onDrop={handleDrop}
     >
       <FlowLogInButton />
-
-      {showHand ? <GrabHand /> : null}
 
       <div className="relative min-h-0 flex-1">
         <ReactFlowProvider>

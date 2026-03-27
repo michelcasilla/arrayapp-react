@@ -54,7 +54,7 @@ export const ProgressSteps = ({ steps, state }: Props) => {
             const circle = active ? (
               <div
                 key={`active-${activeIndex}-${i}`}
-                className="animate-array-step-active relative z-10 box-border flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#9376D4] bg-[#2A107E] shadow-md ring-2 ring-[#9376D4]/25 ring-offset-2 ring-offset-[#EADFFF]"
+                className="animate-array-step-active relative z-10 box-border flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-[#9376D4] bg-[#2A107E] shadow-md"
                 role="listitem"
                 aria-current="step"
                 aria-label={label}
@@ -63,7 +63,7 @@ export const ProgressSteps = ({ steps, state }: Props) => {
                   src="/assets/logo-dots.svg"
                   alt=""
                   draggable={false}
-                  className="h-[22px] w-[22px] select-none"
+                  className="h-[32px] w-[32px] select-none"
                   style={{ display: 'block' }}
                 />
               </div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { FormEvent, MouseEvent } from 'react'
 import './HomePage.css'
 
 type HomePageProps = {
@@ -39,6 +39,13 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
   const [query, setQuery] = useState('')
   const [signinOpen, setSigninOpen] = useState(false)
   const [signinEmail, setSigninEmail] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [firstName, setFirstName] = useState('Michel')
+  const [lastName, setLastName] = useState('Casilla')
+  const [profileEmail, setProfileEmail] = useState('michel@arrayforall.com')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -52,7 +59,10 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setSigninOpen(false)
+      if (event.key === 'Escape') {
+        setSigninOpen(false)
+        setProfileOpen(false)
+      }
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
@@ -67,6 +77,16 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
 
   const handleSigninSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setIsLoggedIn(true)
+    setSigninOpen(false)
+    if (signinEmail.trim()) setProfileEmail(signinEmail.trim())
+    setSigninEmail('')
+  }
+
+  const handleLogout = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    setProfileOpen(false)
+    setIsLoggedIn(false)
   }
 
   return (
@@ -76,17 +96,35 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
           <a href="/" onClick={(e) => e.preventDefault()}>
             <img src="/assets/logo-array.svg" width={120} className="array-home-logo" alt="Array" />
           </a>
-          <button type="button" className="array-home-login-button" onClick={() => setSigninOpen(true)}>
-            Log In
-          </button>
+          {isLoggedIn ? (
+            <button
+              id="user-avatar"
+              type="button"
+              className="array-home-user-avatar"
+              onClick={() => setProfileOpen(true)}
+              aria-label="Open profile panel"
+            >
+              <img src="/images/default-avatar.png" alt="Profile" />
+            </button>
+          ) : (
+            <button type="button" className="array-home-login-button" onClick={() => setSigninOpen(true)}>
+              Log In
+            </button>
+          )}
         </div>
 
         <div id="top-call-for-action" className="array-home-top-call-for-action">
-          <span className="array-home-headline">
-            Structured intelligence for turning <br />
-            intention into execution
-          </span>
-          <span className="array-home-headline-top">It matters, and it&apos;s worth having a real plan</span>
+          {isLoggedIn ? (
+            <span className="array-home-headline">Welcome back, Guest</span>
+          ) : (
+            <>
+              <span className="array-home-headline">
+                Structured intelligence for turning <br />
+                intention into execution
+              </span>
+              <span className="array-home-headline-top">It matters, and it&apos;s worth having a real plan</span>
+            </>
+          )}
         </div>
 
         <header className="array-home-header">
@@ -97,7 +135,7 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
                   <textarea
                     ref={textareaRef}
                     name="plan_request"
-                    placeholder="What are you trying to figure out?"
+                    placeholder={isLoggedIn ? 'What can Array help you with today?' : 'What are you trying to figure out?'}
                     rows={1}
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
@@ -138,7 +176,8 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
                   onClick={() => setQuery(suggestion)}
                   className={`array-home-chip array-home-chip-${index + 1}`}
                 >
-                  {suggestion}
+                  <span className="array-home-chip-label">{suggestion}</span>
+                  <span className="array-home-chip-tooltip">{suggestion}</span>
                 </li>
               ))}
             </ul>
@@ -226,6 +265,116 @@ export const HomePage = ({ onSearch }: HomePageProps) => {
             </a>
             .
           </p>
+        </aside>
+      </div>
+
+      <div
+        id="aside-panel-container"
+        className={`array-home-profile-panel-container ${profileOpen ? 'is-open' : ''}`}
+        aria-hidden={!profileOpen}
+      >
+        <div id="plan-panel-backdrop" className="array-home-profile-panel-backdrop" onClick={() => setProfileOpen(false)} />
+        <aside id="plan-panel" className="array-home-profile-panel">
+          <div className="array-home-profile-panel-header">
+            <button
+              type="button"
+              id="close-plan-panel"
+              className="array-home-profile-panel-close"
+              onClick={() => setProfileOpen(false)}
+            >
+              ✕
+            </button>
+            <div className="array-home-profile-panel-header-content"></div>
+            <div className="array-home-profile-panel-header-actions">
+              <a href="#" className="array-home-profile-logout-link" onClick={handleLogout}>
+                Log out
+              </a>
+            </div>
+          </div>
+
+          <div id="modal-body" className="array-home-profile-panel-body">
+            <div id="user-profile-component" className="array-home-profile-content">
+              <section className="array-home-profile-section-wrapper">
+                <h2 className="array-home-profile-section-title">Update Profile</h2>
+                <hr className="array-home-profile-section-hr" />
+                <div className="array-home-profile-form-grid">
+                  <div className="array-home-profile-avatar-block">
+                    <div className="array-home-profile-avatar-upload-circle">
+                      <img src="/svg/upload.svg" alt="Upload avatar" />
+                    </div>
+                  </div>
+                  <div className="array-home-profile-input-group">
+                    <label>First Name</label>
+                    <input type="text" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                  </div>
+                  <div className="array-home-profile-input-group">
+                    <label>Last Name</label>
+                    <input type="text" value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                  </div>
+                  <div className="array-home-profile-input-group array-home-profile-input-group-full">
+                    <label>Email Address</label>
+                    <input type="email" value={profileEmail} onChange={(event) => setProfileEmail(event.target.value)} />
+                  </div>
+                  <div className="array-home-profile-actions-row">
+                    <button type="button" className="array-home-profile-primary-btn">
+                      Save Profile
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              <section className="array-home-profile-section-wrapper">
+                <h2 className="array-home-profile-section-title">Change Password</h2>
+                <hr className="array-home-profile-section-hr" />
+                <div className="array-home-profile-form-grid array-home-profile-password-grid">
+                  <div className="array-home-profile-input-group">
+                    <label>Password</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      placeholder=" "
+                    />
+                  </div>
+                  <div className="array-home-profile-input-group">
+                    <label>Confirm Password</label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(event) => setConfirmPassword(event.target.value)}
+                      placeholder=" "
+                    />
+                  </div>
+                  <div className="array-home-profile-actions-row">
+                    <button type="button" className="array-home-profile-primary-btn">
+                      Update Password
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              <section className="array-home-profile-section-wrapper">
+                <h2 className="array-home-profile-section-title">Integrations</h2>
+                <hr className="array-home-profile-section-hr" />
+                <div className="array-home-profile-integrations-list">
+                  <div className="array-home-profile-integration-item">
+                    <div>
+                      <h3 className="array-home-profile-integration-name">Google Calendar</h3>
+                      <p className="array-home-profile-integration-description">
+                        Connect Google to sync calendars, documents, and tasks seamlessly into your plans.
+                      </p>
+                    </div>
+                    <div className="array-home-profile-integration-actions">
+                      <a href="#" className="array-home-profile-integration-link">
+                        <img src="/images/integrations/google-icon.png" width={30} alt="Authorize" />
+                        Authorize
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
         </aside>
       </div>
     </div>
