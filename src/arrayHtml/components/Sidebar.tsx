@@ -58,7 +58,9 @@ export const Sidebar = ({
         <header className="shrink-0 space-y-4">
           <ArrayLogo size="md" />
           <div>
-            <h1 className="text-[26px] font-bold leading-tight text-[#2A107E] md:text-[28px]">{PLAN_PAGE.title}</h1>
+            <h1 className="font-['Inter',sans-serif] text-[45px] font-semibold leading-[1] tracking-[0.015em] text-[#2A107E]">
+              {PLAN_PAGE.title}
+            </h1>
             {isDefine ? (
               <p className={unifiedSubClass}>{PLAN_PAGE.subtitle}</p>
             ) : stage === 'clarify-1' || stage === 'clarify-2' ? (
@@ -75,8 +77,12 @@ export const Sidebar = ({
               </>
             ) : stage === 'the-plan' ? (
               <>
-                <p className="mt-2 text-[17px] font-semibold leading-tight text-[#21C9A2]">{thePlanReady}</p>
-                <p className="mt-2 text-[17px] font-semibold leading-tight text-[#2A107E]">{thePlanSub}</p>
+                <p className="mt-2 font-['Inter',sans-serif] text-[18px] font-bold leading-[1.46] tracking-[0.005em] text-[#1DBB91]">
+                  {thePlanReady}
+                </p>
+                <p className="mt-2 font-['Inter',sans-serif] text-[18px] font-bold leading-[1.46] tracking-[0.005em] text-[#2A107E]">
+                  {thePlanSub}
+                </p>
               </>
             ) : (
               <p className={unifiedCopyClass}>{confirmText}</p>

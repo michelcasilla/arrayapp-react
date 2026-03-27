@@ -140,7 +140,7 @@ export const ArrayHtmlApp = () => {
           className="group relative w-2 shrink-0 cursor-col-resize touch-none select-none"
           onPointerDown={handleSplitterPointerDown}
         >
-          <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-[#D7C2FF] group-hover:bg-[#2A107E]/40 group-active:bg-[#2A107E]/55" />
+          <span className="absolute inset-y-0 left-1/2 w-[2px] -translate-x-1/2 bg-[#BA98FF] group-hover:bg-[#A884F5] group-active:bg-[#9B78E8]" />
         </div>
         <div className="min-h-0 min-w-0 flex-1">
           <FlowCanvas

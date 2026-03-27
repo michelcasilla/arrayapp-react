@@ -31,7 +31,7 @@ export const PiggyBankNode = memo(({ data }: NodeProps<PiggyBankNodeType>) => {
       <div className="flex items-center gap-3">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white">
           <img
-            src="/assets/icon-home.svg"
+            src="/assets/icon-piggy-bank.svg"
             alt=""
             draggable={false}
             className="h-14 w-14 select-none"
