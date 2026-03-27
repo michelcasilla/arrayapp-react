@@ -14,6 +14,7 @@ alwaysApply: true
 
 - **Authoritative sources**: follow this file, **`.cursor/rules/typescript-react-conventions.mdc`** for TypeScript/React files, and **`eslint.config.js`** (arrow functions, hooks, React Refresh, etc.). Implementations must align with these—not ad‑hoc preferences.
 - **Before finishing code changes**: ensure **`npm run lint`** and **`npm run build`** (`tsc -b`) succeed; fix violations rather than disabling rules without a documented reason.
+- **App logo source (mandatory)**: whenever the application logo is rendered in UI, use **`/assets/logo-array.svg`**. Do not use legacy logo files (`/images/array-logo*`, `/images/homepage-logo*`, png variants).
 
 ## JavaScript/TypeScript style
 
